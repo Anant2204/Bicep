@@ -1,0 +1,73 @@
+trigger:
+- dev
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+ - stage: Tfvalidate
+   jobs:
+    - job: validate
+      continueOnError: false
+      steps:
+       - task: TerraformInstaller@1
+         displayName: Install terraform 
+         inputs:
+          terraformVersion: 'latest'
+       - task: TerraformTaskV4@4
+         displayName: init
+         inputs:
+           provider: 'azurerm'
+           command: 'init'
+           backendServiceArm: 'Terraformconnection'
+           backendAzureRmResourceGroupName: 'rg-websites-prod-001'
+           backendAzureRmStorageAccountName: 'stwebsitesprod001'
+           backendAzureRmContainerName: 'statefile'
+           backendAzureRmKey: 'terraform.tfstate'
+       - task: TerraformTaskV4@4
+         displayName: validate
+         inputs:
+          provider: 'azurerm'
+          command: 'validate'
+ - stage: TFdeploy 
+   condition: succeeded('Tfvalidate')
+   dependsOn: Tfvalidate
+   jobs:
+     - job: Apply 
+       steps:
+       - task: TerraformInstaller@1
+         displayName: Install terraform 
+         inputs:
+          terraformVersion: 'latest'
+       - task: TerraformTaskV4@4
+         displayName: init
+         inputs:
+           provider: 'azurerm'
+           command: 'init'
+           backendServiceArm: 'Terraformconnection'
+           backendAzureRmResourceGroupName: 'rg-websites-prod-001'
+           backendAzureRmStorageAccountName: 'stwebsitesprod001'
+           backendAzureRmContainerName: 'statefile'
+           backendAzureRmKey: 'terraform.tfstate'
+       - task: TerraformTaskV4@4
+         displayName: plan
+         inputs:
+           provider: 'azurerm'
+           command: 'plan'
+           environmentServiceNameAzureRM: 'Terraformconnection'
+       - task: TerraformTaskV4@4
+         displayName: apply
+         inputs:
+           provider: 'azurerm'
+           command: 'apply'
+           environmentServiceNameAzureRM: 'Terraformconnection'
+       
+      
+       
+       
+       
+          
+       
+        
+
+      
