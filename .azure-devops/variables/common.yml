@@ -1,0 +1,39 @@
+variables:
+  - name: artifactsPath
+    value: '$(Pipeline.Workspace)'
+  - name: artifactName
+    value: 'drop'
+  - name: buildConfiguration
+    value: 'Release'
+  - name: archiveFile
+    value: 'archive.zip'
+  - name: subscriptionId
+    value: 'f777258d-fdd8-4efd-81be-8c383ae0b600'
+  - name: serviceConnectionObjectId1
+    value: '96c693e1-7808-4366-8da8-9ec1b8476def'
+  - name: armPath
+    value: '$(System.DefaultWorkingDirectory)/.azure'
+  - name: scriptsPath
+    value: '$(System.DefaultWorkingDirectory)/.azure-devops/scripts'
+  - name: srcPath
+    value: '$(System.DefaultWorkingDirectory)/src'
+  - name: tempPath
+    value: '$(Agent.TempDirectory)/ymltemp'
+  - name: apiPath
+    value: '$(System.DefaultWorkingDirectory)/src/Presentation/WebApi'
+  - name: apiProject
+    value: 'Presentation.WebApi.csproj'
+  - name: dotnetVersion
+    value: "7.x"
+  - name: unitPath
+    value: '$(System.DefaultWorkingDirectory)/tests/Application.Specs.Unit'
+  - name: unitProject
+    value: 'Application.Specs.Unit.csproj'
+  - name: productName
+    value: 'aacn-assessments'
+  - name: azureDevOpsProject
+    value: 'Architecture'
+  - name: deployApprovers
+    value: 'robert.good@aacn.org; erik.christoffel@aacn.org;'
+  - name: deployMessage
+    value: '<p>Team: $(System.TeamProject)<br/>Repo: $(Build.Repository.Name)<br/>Requested by: $(Build.RequestedFor)<br/>Date: $(Build.StartTime)<br/>Build: $(Build.BuildNumber)<br/>Url: $(Build.BuildUri)</p><p>A new deployment has been requested. Please approve or reject the deployment.</p>'

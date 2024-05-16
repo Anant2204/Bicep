@@ -1,0 +1,29 @@
+variables:
+  - group: aacn-beacon-v3-stg
+  - template: common.yml
+  - name: rgEnvironment
+    value: 'Staging'
+  - name: rgName
+    value: 'rg-beacon-v3-stg-001'
+  - name: rgLocation
+    value: 'West US 2'
+  - name: 'appiName'
+    value: 'appi-beacon-v3-stg-001'
+  - name: 'kvName'
+    value: 'kv-beacon-v3-stg-001'
+  - name: stName
+    value: 'stbeaconv3stg001'
+  - name: workName
+    value: 'work-microservices-stg-001'
+  - name: workResourceGroupName
+    value: 'rg-microservices-stg-001'
+  - name: workLocation
+    value: 'West US 2'
+  - name: sqlName
+    value: 'sql-beacon-v3-stg-001'
+  - name: sqldbName
+    value: 'sqldb-beacon-v3-stg-001'
+  - name: apiUrl
+    value: 'https://microservicesstg.aacn.org/beacon-v3'
+  - name: siteDns
+    value: 'microservicesstg.aacn.org'

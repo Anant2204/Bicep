@@ -1,0 +1,77 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - '*'
+  paths:
+    include:
+    - .azure/*
+    exclude:
+    - '*'
+
+pr:
+  branches:
+    exclude:
+    - '*'
+
+pool:
+   vmImage: 'Ubuntu-latest'
+
+parameters:
+  - name: releaseToDev
+    type: boolean
+    default: false
+  - name: subscriptionService
+    type: string
+    default: 'aacn-internal-microservices-001'
+
+variables: 
+ templatefile: '.azure/main-landingzone-appservice.bicep'
+ parametersfile: '.azure-devops/variables/Dev.parameters.json'
+ template: ../variables/common.yml
+
+stages:
+  - stage: development
+    condition: eq(lower(${{ parameters.releaseToDev }}), 'true')
+    variables:
+      - template: ../variables/ENV.yml
+       
+    jobs:
+      - job: deploy_approval
+        pool: server
+        timeoutInMinutes: 4320
+        steps:
+        - task: ManualValidation@0
+          inputs:
+           notifyUsers: $(deployApprovers)
+           instructions: $(deployMessage)
+           onTimeout: reject
+    
+      - job: Validatelandingzone
+        dependsOn: deploy_approval
+        steps:
+           - task: AzureCLI@2
+             displayName: Validate deployment 
+             inputs:
+               azureSubscription: '${{ parameters.subscriptionService }}'
+               scriptType: 'bash'
+               scriptLocation: 'inlineScript'
+               inlineScript: |
+                 az --version  
+                 az deployment group what-if --parameters @$(parametersfile) --resource-group $(devresourceGroupName) --template-file $(templatefile)
+
+      - job: Deploylandingzone
+        dependsOn: Validatelandingzone
+        steps:
+           - task: AzureCLI@2
+             displayName: Deploylandingzone 
+             inputs:
+               azureSubscription: '${{ parameters.subscriptionService }}'
+               scriptType: 'bash'
+               scriptLocation: 'inlineScript'
+               inlineScript: |
+                 az deployment group create --parameters @$(parametersfile) --resource-group $(devresourceGroupName) --template-file $(templatefile)
+
+
+ 
+  

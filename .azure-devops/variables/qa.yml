@@ -1,0 +1,29 @@
+variables:
+  - group: aacn-beacon-v3-qa
+  - template: common.yml
+  - name: rgEnvironment
+    value: 'QA'
+  - name: rgName
+    value: 'rg-beacon-v3-qa-001'
+  - name: rgLocation
+    value: 'West US 2'
+  - name: 'appiName'
+    value: 'appi-beacon-v3-qa-001'
+  - name: 'kvName'
+    value: 'kv-beacon-v3-qa-001'
+  - name: stName
+    value: 'stbeaconv3qa001'
+  - name: workName
+    value: 'work-microservices-qa-001'
+  - name: workResourceGroupName
+    value: 'rg-microservices-qa-001'
+  - name: workLocation
+    value: 'West US 2'
+  - name: sqlName
+    value: 'sql-beacon-v3-qa-001'
+  - name: sqldbName
+    value: 'sqldb-beacon-v3-qa-001'
+  - name: apiUrl
+    value: 'https://microservicesqa.aacn.org/beacon-v3'
+  - name: siteDns
+    value: 'microservicesqa.aacn.org'

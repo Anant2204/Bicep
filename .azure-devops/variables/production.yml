@@ -1,0 +1,30 @@
+variables:
+  - template: common.yml  
+  - name: rgEnvironment
+    value: 'Production'
+  - name: rgName
+    value: 'rg-assessments-prod-001'
+  - name: rgLocation
+    value: 'West US 2'
+  - name: 'appiName'
+    value: 'appi-assessments-prod-001'
+  - name: 'appName'
+    value: 'api-assessments-prod-001'
+  - name: 'kvName'
+    value: 'kv-assessments-prod-001'
+  - name: stName
+    value: 'stbeaconv3prod001'
+  - name: workName
+    value: 'work-microservices-prod-001'
+  - name: workResourceGroupName
+    value: 'rg-microservices-prod-001'
+  - name: workLocation
+    value: 'West US 2'
+  - name: sqlName
+    value: 'sql-assessments-prod-001'
+  - name: sqldbName
+    value: 'sqldb-assessments-prod-001'
+  - name: apiUrl
+    value: 'https://microservices.aacn.org/assessments'
+  - name: siteDns
+    value: 'microservices.aacn.org'

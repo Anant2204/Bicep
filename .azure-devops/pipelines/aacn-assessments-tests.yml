@@ -1,0 +1,42 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - 'develop'
+    - 'main'
+  paths:
+    include:
+    - tests/*
+
+pr:
+  branches:
+    exclude:
+    - '*'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  - template: ../variables/development.yml
+  - name: buildPlatform
+    value: 'Any CPU'
+  - name: buildConfiguration
+    value: 'Release'
+
+stages:
+  - stage: development
+    condition: and(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), ne(variables['Build.Reason'], 'PullRequest'))
+    variables:
+      - template: ../variables/development.yml
+      
+    jobs:
+      - job: test_integration
+        steps:
+          - template: ../steps/integration-test-steps.yml
+            parameters:
+              integrationPath: '$(integrationPath)'
+              appcsEnvironmentVariable: '$(appcsEnvironmentVariable)'
+              appcsConnection: '$(appcsConnection)'
+              stEnvironmentVariable: '$(stEnvironmentVariable)'
+              stConnection: '$(stConnection)'
+              rgEnvironment: '$(rgEnvironment)'

@@ -1,0 +1,95 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - '*'
+  paths:
+    include:
+    - src/Core/*
+    - src/Infrastructure/*
+    - src/Specs/*
+    - src/Presentation/Api/*
+
+pr:
+  branches:
+    exclude:
+    - '*'
+
+pool:
+  vmImage: 'windows-latest'
+
+
+variables:
+ buildconfiguration: 'Release'
+ solution: '**/AACN.API.sln'
+ project: '**/AACN.API.csproj'
+ test: '**/AACN.API.csproj'
+ nugetfilepath: '.nuget/NuGet.config'
+ version: '7.0.408'
+
+stages:
+  - stage: development
+    jobs:
+      - job: build_src
+        steps:
+         -  task: UseDotNet@2
+            displayName: UseSDKVersion 
+            inputs:
+             packageType: 'sdk'
+             version: $(version)
+             includePreviewVersions: true
+         -  task: DotNetCoreCLI@2
+            displayName: dotnetrestore
+            inputs:
+             command: 'restore'
+             projects: '$(solution)'
+             feedsToUse: 'config'
+             nugetConfigPath: '$(nugetfilepath)'
+         - task: DotNetCoreCLI@2
+           displayName: dotnet build 
+           inputs:
+             command: 'build'
+             projects: '$(project)'
+             arguments: '--configuration $(buildconfiguration)'
+
+      - job: Test_src
+        dependsOn: build_src
+        steps:
+         - task: DotNetCoreCLI@2
+           displayName: dotnet test
+           inputs:
+             command: 'test'
+             projects: '$(test)'
+             arguments: '--configuration $(buildConfiguration)'
+             publishTestResults: true
+
+      - job: Publish_src
+        dependsOn: Test_src
+        steps: 
+        - task: DotNetCoreCLI@2
+          displayName: dotnet publish
+          inputs:
+            command: 'publish'
+            publishWebProjects: false
+            projects: '$(project)'
+            arguments: '--configuration $(buildconfiguration) --output $(Build.ArtifactStagingDirectory)'
+            zipAfterPublish: true
+    
+        - task: PublishBuildArtifacts@1
+          displayName: Publishbuildartifacts
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+            ArtifactName: 'drop'
+            publishLocation: 'Container'
+
+      
+        
+        
+
+
+           
+
+        
+         
+          
+         

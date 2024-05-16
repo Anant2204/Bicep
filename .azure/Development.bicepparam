@@ -1,0 +1,17 @@
+using './main-landingzone-appservice.bicep'
+param location = 'West US 2'
+param tags = 'Dev'
+param applicationInsightsName = 'appi-assessments-dev-001'
+param Application_Type = 'web'
+param Flow_Type = 'Bluefield'
+param keyVaultName = 'kv-assessments-dev-002'
+param skuName = 'standard'
+param tenantId = 'ca4fd2d7-85ea-42d2-b7b3-30ef2666c7ab'
+param storageName = 'stassessmentsdev002'
+param storageSkuName = 'Standard_LRS'
+param appName = 'api-assessments-dev-001'
+param rgEnvironment = 'Development'
+param appServicePlanName = 'plan-assessments-dev-001'
+param sku = 'S1'
+
+
